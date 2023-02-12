@@ -1,5 +1,7 @@
 package io.github.helckson;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,44 +11,36 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import io.github.helckson.domain.entity.Cliente;
-import io.github.helckson.domain.respositorio.Clientes;
+import io.github.helckson.domain.entity.Pedido;
+import io.github.helckson.domain.respository.Clientes;
+import io.github.helckson.domain.respository.Pedidos;
 
 @SpringBootApplication
 public class VendasApplication {
 	
 	@Bean
-	public CommandLineRunner init(@Autowired Clientes clientes) {
+	public CommandLineRunner init(
+			@Autowired Clientes clientes,
+			@Autowired Pedidos pedidos) {
 		return args -> {
 			System.out.println("Salvando clientes");
-			clientes.salvar(new Cliente("Joao"));
-			clientes.salvar(new Cliente("José"));
+			Cliente jose = new Cliente("José");
+			clientes.save(jose);
 			
-			List<Cliente> todosClientes = clientes.obterTodos();
-			todosClientes.forEach(System.out::println);
+			Pedido p = new Pedido();
+			p.setCliente(jose);
+			p.setDataPedido(LocalDate.now());
+			p.setTotal(BigDecimal.valueOf(100));
 			
-			System.out.println("Atualizando clientes");
-			todosClientes.forEach(c -> {
-				c.setNome(c.getNome() + " atualizado.");
-				clientes.atualizar(c);
-			});
+			pedidos.save(p);
 			
-			todosClientes = clientes.obterTodos();
-			todosClientes.forEach(System.out::println);
+//			Cliente cliente = clientes.findClienteFetchPedidos(jose.getId());
+//			System.out.println(cliente);
+//			System.out.println(cliente.getPedidos());
 			
-			System.out.println("Buscando clientes");
-			clientes.buscarPorNome("Jos").forEach(System.out::println);
+			pedidos.findByCliente(jose).forEach(System.out::println);;
 			
-			System.out.println("Deletando clientes");
-			clientes.obterTodos().forEach(c -> {
-				clientes.deletar(c);
-			});
 			
-			todosClientes = clientes.obterTodos();
-			if(todosClientes.isEmpty()) {
-				System.out.println("Nenhum cliente encontrado.");
-			} else {
-				todosClientes.forEach(System.out::println);
-			}
 		};
 	}
 
