@@ -41,6 +41,16 @@ public class VendasApplication {
 			pedidos.findByCliente(jose).forEach(System.out::println);;
 			
 			
+<<<<<<< Updated upstream
+=======
+			List<Cliente> todosClientes = clientes.obterTodos();
+			todosClientes.forEach(System.out::println);
+			
+			List<Cliente> todossClientes = clientes.obterTodos();
+			todosClientes.forEach(System.out::println);
+			
+			
+>>>>>>> Stashed changes
 		};
 	}
 
