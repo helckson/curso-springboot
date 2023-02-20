@@ -4,8 +4,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import io.github.helckson.domain.entity.enums.StatusPedido;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,7 +16,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "pedido")
 public class Pedido {
@@ -32,41 +41,11 @@ public class Pedido {
 	@Column(name = "total", precision = 20, scale = 2)
 	private BigDecimal total;
 	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private StatusPedido status;
+	
 	@OneToMany(mappedBy = "pedido")
 	private List<ItemPedido> itens;
 	
-	public List<ItemPedido> getItens() {
-		return itens;
-	}
-	public void setItens(List<ItemPedido> itens) {
-		this.itens = itens;
-	}
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public Cliente getCliente() {
-		return cliente;
-	}
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-	public LocalDate getDataPedido() {
-		return dataPedido;
-	}
-	public void setDataPedido(LocalDate dataPedido) {
-		this.dataPedido = dataPedido;
-	}
-	public BigDecimal getTotal() {
-		return total;
-	}
-	public void setTotal(BigDecimal total) {
-		this.total = total;
-	}
-	@Override
-	public String toString() {
-		return "Pedido [id=" + id + ", dataPedido=" + dataPedido + ", total=" + total + "]";
-	}
 }
